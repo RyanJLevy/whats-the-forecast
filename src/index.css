@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .weather-card {
+        @apply w-[320px] lg:w-[500px] flex items-center justify-start py-4 px-8 mt-2 rounded-md shadow-md hover:scale-105 cursor-default relative;
+    }
+    .clear-weather {
+        @apply bg-[#47BDFF];
+    }
+}

@@ -21,15 +21,19 @@ async function GetWeatherData(lat, lon, state) {
 // This function parses through the JSON array of city data.
 // @param {string} - partial/complete string of (City, State, Country)
 // Checks for comma delimiter.
-// @returns Location object.
+// @returns list of location objects.
 async function GetPossibleLocations(currentString) {
     const [cityName, stateName, countryName] = currentString.split(',');
     // Search for match(es) within the US.
     let matches = locationData.filter(item => {
-        const condition = stateName ? (cityName.trim().toLowerCase() === item.name.toLowerCase() &&  stateName?.trim().toLowerCase() === item.state.toLowerCase()) : 
-        (cityName.trim().toLowerCase() === item.name.toLowerCase());
+        const condition = stateName ? (cityName.trim().toLowerCase() === item.name.toLowerCase() && item.state.toLowerCase().startsWith(stateName?.trim().toLowerCase())) :
+        item.name.toLowerCase().startsWith(cityName.trim().toLowerCase());
         return condition && item.country === 'US';
     });
+    // Limit return array to 10 entries.
+    if (matches.length > 10) {
+        matches = matches.slice(0, 10);
+    }
 
     return matches;
 }

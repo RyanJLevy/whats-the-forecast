@@ -7,10 +7,10 @@ function LocationWidget(props) {
     const [weather] = props.data.weather;
     const temperature = Math.floor(parseInt(props.data.main.temp));
     const date = GetDate();
-    const [locationSaved, setLocationSaved] = useState(false);
+    const [locationSaved, setLocationSaved] = useState(props.isSaved ?? false);
 
     // Updates state and LocalStorage.
-    const handleSaveButtonClick = (event) => {
+    const handleSaveButtonClick = () => {
         setLocationSaved(!locationSaved);
         let localStorageLocations = JSON.parse(localStorage.getItem('locations')) ?? [];
         // Find and remove entry in LS with given lat/lon data.
@@ -20,7 +20,7 @@ function LocationWidget(props) {
             });
             !locations.length ? localStorage.removeItem('locations') : localStorage.setItem('locations', JSON.stringify(locations));
         }
-        !locationSaved ? localStorage.setItem('locations', JSON.stringify([...localStorageLocations, {lat: props.data.coord.lat, lon: props.data.coord.lon}])) : removeFromLocalStorage();
+        !locationSaved ? localStorage.setItem('locations', JSON.stringify([...localStorageLocations, {lat: props.data.coord.lat, lon: props.data.coord.lon, state: props.data.state}])) : removeFromLocalStorage();
     }
     
     return (
@@ -37,7 +37,7 @@ function LocationWidget(props) {
                 </div>
             </div>
             
-            <button title='Save location' onClick={handleSaveButtonClick}>
+            <button title={locationSaved ? 'Unsave this location' : 'Save this location'} onClick={handleSaveButtonClick}>
                 {locationSaved ? <BookmarkIconSolid className='text-white absolute w-[25px] top-4 right-4' /> : <BookmarkIcon className='text-white absolute w-[25px] top-4 right-4' />}            
             </button>
         </div>

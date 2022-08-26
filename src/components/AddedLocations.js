@@ -17,7 +17,12 @@ function AddedLocations() {
         <div className='flex flex-col w-[400px] lg:w-[800px] items-center my-8 pb-4 bg-gray-100 rounded-md'>
             {savedLocations.length ? savedLocations.map(location => (
                 <LocationWidget key={location.id} data={location} isSaved={true} />
-            )) : <h1 className='p-6 italic '>No saved locations.</h1>}
+            )) : 
+            <div className='flex flex-col w-full justify-center items-center'>
+                <h1 className='p-6 italic text-gray-600 text-sm text-center'>You haven't saved any locations yet, champ. Give a bookmark icon a wee click.</h1>
+                <p className='pb-6 italic text-gray-400 text-[10px] lg:text-xs'>* You may need to refresh the page to see your newly saved locations!</p>
+            </div>
+            }
         </div>
     )
 }

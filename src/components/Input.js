@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState, useContext } from 'react'
-import {XCircleIcon} from '@heroicons/react/outline'
+import React, { useEffect, useRef, useState } from 'react'
+import {XCircleIcon, LocationMarkerIcon} from '@heroicons/react/outline'
 import Button from './Button'
 import { GetPossibleLocations } from '../helpers/api.helpers';
-import { AppContext } from '../AppContext';
 
 function Input({ openModal, setData }) {
     const inputRef = useRef('');
@@ -49,11 +48,11 @@ function Input({ openModal, setData }) {
 
     return (
             <div>
-                <form className='relative z-50' onSubmit={HandleSubmit}>
+                <form className='relative z-50' onSubmit={HandleSubmit} spellCheck={'false'}>
                     <div className='w-[320px] lg:w-[500px] relative'>
                         <input
                         type={'text'}
-                        className='bg-none border-purple-secondary border-[1px] rounded-md focus:outline-none w-full px-6 py-2 placeholder:text-gray-secondary'
+                        className='bg-none border-purple-secondary border-[1px] rounded-md focus:outline-none w-full px-6 py-2 placeholder:text-gray-secondary text-purple-secondary'
                         placeholder='Ex: San Diego, CA'
                         ref={inputRef}
                         onKeyUp={HandleKeyUp}
@@ -69,7 +68,8 @@ function Input({ openModal, setData }) {
                                     onClick={ () => HandleSearchItemSelection(location.coord, location.state) }
                                     tabIndex={0}
                                     >
-                                        <h1>{location.name}, {location.state}</h1>
+                                        <LocationMarkerIcon className='w-6 text-purple-primary px-1' />
+                                        <h1 className='text-purple-primary'>{location.name}, {location.state}</h1>
                                     </li>
                                     
                                 ))}

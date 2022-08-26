@@ -1,5 +1,8 @@
 import { GetWeatherData } from "./api.helpers";
 
+// Gets weather data of all locations stored in LS.
+// @params {none}
+// @return {array} - array of weather information JSON objects.
 async function GetWeatherDataFromStorage() {
     let weatherData = [];
     if (!localStorage.getItem('locations')) return weatherData;

@@ -37,8 +37,9 @@ function SearchResults({ locationData, closeModal }) {
             setLocationSaved(locationInLS);
         }
         checkForLocalStorage();
-    }, []);
+    }, [locationData]);
 
+    // Save or remove current location from Local Storage.
     const HandleSaveClick = () => {
         const [lat, lon, state] = locationData;
         setLocationSaved(!locationSaved);
@@ -53,6 +54,9 @@ function SearchResults({ locationData, closeModal }) {
         !locationSaved ? localStorage.setItem('locations', JSON.stringify([...localStorageLocations, {lat: parseFloat(lat).toFixed(4), lon: parseFloat(lon).toFixed(4), state: state}])) : removeFromLocalStorage();
     }
 
+    // Get the appropriate weather image for the given weather conditions.
+    // @param {string} - weather description; eg 'Clouds'
+    // @return {element} - svg element.
     const getWeatherImage = (weatherDescription) => {
         let weatherImage = null;
         switch (weatherDescription.toLowerCase()) {
@@ -66,7 +70,6 @@ function SearchResults({ locationData, closeModal }) {
         return weatherImage;
     }
 
-    // TODO: Display name with pin icon next to it. Styling. Display high and low temperatures. Save button with functionality.
     return (
         <div 
         className='flex flex-col items-center p-16 absolute top-0 left-0 w-full h-full bg-[#00000020] z-[99]'
@@ -80,8 +83,8 @@ function SearchResults({ locationData, closeModal }) {
             (   <div className='w-full h-full flex flex-col items-center py-8'>
                     <Button className='hover:bg-gray-100 absolute left-6 top-3 rounded-sm' iconClass='w-[18px] h-[18px] text-purple-primary' Icon={XIcon} title='Close location window.' onClick={closeModal} />
                     <Button className='hover:bg-gray-100 absolute right-6 top-3 rounded-sm' iconClass='w-[18px] h-[18px] text-purple-primary' Icon={locationSaved ? BookmarkIconSolid : BookmarkIcon} title='Save location.' onClick={HandleSaveClick} />
-                    <div className='text-lg w-40 lg:w-60 flex items-center justify-center border-b-[1px] border-b-purple-primary'>
-                        <LocationMarkerIcon className='w-6 text-purple-primary pr-2' />
+                    <div className='text-lg w-50 lg:w-60 flex flex-col lg:flex-row items-center justify-center border-b-[1px] border-b-purple-primary'>
+                        <LocationMarkerIcon className=' hidden lg:block w-6 text-purple-primary pr-2' />
                         <h1 className='text-purple-secondary font-semibold'>{weatherData?.name}, {weatherData?.state}</h1>
                     </div>
                     

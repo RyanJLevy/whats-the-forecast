@@ -16,11 +16,12 @@ function LocationWidget(props) {
         // Find and remove entry in LS with given lat/lon data.
         const removeFromLocalStorage = () => {
             const locations = localStorageLocations.filter(location => {
-                return location.lat !== props.data.coord.lat && location.lon !== props.data.coord.lon;
+                return location.lat.toFixed(2) !== props.data.coord.lat.toFixed(2) && location.lon.toFixed(2) !== props.data.coord.lon.toFixed(2);
             });
+            console.log(locations);
             !locations.length ? localStorage.removeItem('locations') : localStorage.setItem('locations', JSON.stringify(locations));
         }
-        !locationSaved ? localStorage.setItem('locations', JSON.stringify([...localStorageLocations, {lat: props.data.coord.lat, lon: props.data.coord.lon, state: props.data.state}])) : removeFromLocalStorage();
+        !locationSaved ? localStorage.setItem('locations', JSON.stringify([...localStorageLocations, {lat: parseFloat(props.data.coord.lat).toFixed(4), lon: parseFloat(props.data.coord.lon).toFixed(4), state: props.data.state}])) : removeFromLocalStorage();
     }
     
     return (

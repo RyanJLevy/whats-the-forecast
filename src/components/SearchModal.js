@@ -6,15 +6,17 @@ import ClearSky from '../images/clear.svg';
 import Clouds from '../images/clouds.svg';
 import { LocationMarkerIcon, BookmarkIcon } from '@heroicons/react/outline';
 import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/solid';
+import IsLocationInStorage from '../helpers/localStorage.helpers';
 
 function SearchResults({ locationData, closeModal }) {
     const [ hasLoaded, setHasLoaded ] = useState(false);
     const [ weatherData, setWeatherData ] = useState(null);
     const [ locationSaved, setLocationSaved ] = useState(false);
 
+    // Get weather data for searched location.
     useEffect(() => {
+        const [lat, lon, state] = locationData;
         const getWeatherData = async () => {
-            const [lat, lon, state] = locationData;
             const returnedData = await GetWeatherData(lat, lon, state);
             console.log(returnedData);
             setWeatherData(returnedData);
@@ -22,7 +24,20 @@ function SearchResults({ locationData, closeModal }) {
         };
 
         getWeatherData();
+
     }, [weatherData?.id, hasLoaded, locationData]);
+
+    // // Check whether or not location is currently saved.
+    useEffect(() => {
+        const [lat, lon, state] = locationData;
+        console.log(lat, lon, state);
+        const checkForLocalStorage = async () => {
+            const locationInLS = await IsLocationInStorage({lat: parseFloat(lat).toFixed(4), lon: parseFloat(lon).toFixed(4), state: state});
+            console.log(locationInLS);
+            setLocationSaved(locationInLS);
+        }
+        checkForLocalStorage();
+    }, []);
 
     const HandleSaveClick = () => {
         const [lat, lon, state] = locationData;
@@ -35,11 +50,10 @@ function SearchResults({ locationData, closeModal }) {
             });
             !locations.length ? localStorage.removeItem('locations') : localStorage.setItem('locations', JSON.stringify(locations));
         }
-        !locationSaved ? localStorage.setItem('locations', JSON.stringify([...localStorageLocations, {lat: lat, lon: lon, state: state}])) : removeFromLocalStorage();
+        !locationSaved ? localStorage.setItem('locations', JSON.stringify([...localStorageLocations, {lat: parseFloat(lat).toFixed(4), lon: parseFloat(lon).toFixed(4), state: state}])) : removeFromLocalStorage();
     }
 
     const getWeatherImage = (weatherDescription) => {
-        console.log(weatherDescription)
         let weatherImage = null;
         switch (weatherDescription.toLowerCase()) {
             case 'clouds':
@@ -66,7 +80,10 @@ function SearchResults({ locationData, closeModal }) {
             (   <div className='w-full h-full flex flex-col items-center py-8'>
                     <Button className='hover:bg-gray-100 absolute left-6 top-3 rounded-sm' iconClass='w-[18px] h-[18px] text-purple-primary' Icon={XIcon} title='Close location window.' onClick={closeModal} />
                     <Button className='hover:bg-gray-100 absolute right-6 top-3 rounded-sm' iconClass='w-[18px] h-[18px] text-purple-primary' Icon={locationSaved ? BookmarkIconSolid : BookmarkIcon} title='Save location.' onClick={HandleSaveClick} />
-                    <h1 className='text-purple-secondary font-semibold text-lg w-40 lg:w-60 text-center border-b-[1px] border-b-purple-primary'>{weatherData?.name}, {weatherData?.state}</h1>
+                    <div className='text-lg w-40 lg:w-60 flex items-center justify-center border-b-[1px] border-b-purple-primary'>
+                        <LocationMarkerIcon className='w-6 text-purple-primary pr-2' />
+                        <h1 className='text-purple-secondary font-semibold'>{weatherData?.name}, {weatherData?.state}</h1>
+                    </div>
                     
                     <img className='my-4' src={getWeatherImage(weatherData?.weather[0].main ?? '')} alt={`Weather condition is: ${weatherData?.weather[0].main}`} />
                     <div className='py-1 px-4 rounded-sm bg-gray-100 shadow-sm flex justify-between items-center my-2'>

@@ -1,8 +1,9 @@
 import { GetWeatherData } from "./api.helpers";
 
 async function GetWeatherDataFromStorage() {
-    const localStorageValues = await JSON.parse(localStorage.getItem('locations'));
     let weatherData = [];
+    if (!localStorage.getItem('locations')) return weatherData;
+    const localStorageValues = await JSON.parse(localStorage.getItem('locations'));
     // Get weather data for each location.
     for (const location of localStorageValues) {
         const data = await GetWeatherData(location.lat, location.lon, location.state);
@@ -12,18 +13,19 @@ async function GetWeatherDataFromStorage() {
     
 }
 
-// Updates state and LocalStorage.
-const SaveLocationToStorage = (latitude, longitude, state, saveState, saveStateCallback) => {
-    saveStateCallback(!saveState);
-    let localStorageLocations = JSON.parse(localStorage.getItem('locations')) ?? [];
-    // Find and remove entry in LS with given lat/lon data.
-    const removeFromLocalStorage = () => {
-        const locations = localStorageLocations.filter(location => {
-            return location.lat !== latitude && location.lon !== longitude;
-        });
-        !locations.length ? localStorage.removeItem('locations') : localStorage.setItem('locations', JSON.stringify(locations));
+// Returns whether or not location is currently saved to user Local Storage.
+// @param {object} - location latitude, longitude, and state.
+// @return {boolean} - returns true if in LS, false if not.
+export default async function IsLocationInStorage( locationDetails ) {
+    if (!localStorage.getItem('locations')) return false;
+    const localStorageValues = await JSON.parse(localStorage.getItem('locations'));
+    for (const value of localStorageValues) {
+        console.log(value.lat, locationDetails.lat)
+        if (value.lat === locationDetails.lat && value.lon === locationDetails.lon && value.state.toLowerCase() === locationDetails.state.toLowerCase()) {
+            return true;
+        }
     }
-    !saveState ? localStorage.setItem('locations', JSON.stringify([...localStorageLocations, {lat: latitude, lon: longitude, state: state}])) : removeFromLocalStorage();
+    return false;
 }
 
-export { GetWeatherDataFromStorage, SaveLocationToStorage };
+export { GetWeatherDataFromStorage };

@@ -4,7 +4,7 @@ import Button from './Button'
 import { GetPossibleLocations } from '../helpers/api.helpers';
 import { AppContext } from '../AppContext';
 
-function Input(props) {
+function Input({ openModal, setData }) {
     const inputRef = useRef('');
     const [currentSearch, setCurrentSearch] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -23,6 +23,15 @@ function Input(props) {
     const filterSearch = async (searchTerm) => {
         const results = await GetPossibleLocations(searchTerm);
         setSearchResults(results);
+    }
+
+    // Handles selection of search result. Sets modal open state and search coordinates.
+    const HandleSearchItemSelection = ( coordinates, state ) => {
+        openModal();
+        setData([ coordinates.lat, coordinates.lon, state ]);
+        inputRef.current.value = '';
+        setCurrentSearch('');
+        setSearchResults([]);
     }
 
     useEffect(() => {
@@ -54,9 +63,15 @@ function Input(props) {
                         {searchResults && (
                             <ul className='absolute w-full bg-white shadow-md rounded-md z-50'>
                                 {searchResults.map(location => (
-                                    <li key={location.id} className='w-full flex items-center justify-center py-4 hover:bg-gray-50 cursor-pointer'>
+                                    <li 
+                                    key={location.id} 
+                                    className='w-full flex items-center justify-center py-4 hover:bg-gray-50 cursor-pointer'
+                                    onClick={ () => HandleSearchItemSelection(location.coord, location.state) }
+                                    tabIndex={0}
+                                    >
                                         <h1>{location.name}, {location.state}</h1>
                                     </li>
+                                    
                                 ))}
 
                             </ul>

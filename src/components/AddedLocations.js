@@ -14,7 +14,7 @@ function AddedLocations() {
         getLocationData();
     }, []);
     return (
-        <div className='flex flex-col w-[400px] lg:w-[800px] items-center my-8 pb-4 bg-gray-100 rounded-md'>
+        <div className='flex flex-col w-[400px] lg:w-[800px] max-h-[460px] overflow-scroll items-center my-8 pb-4 bg-gray-100 rounded-md'>
             {savedLocations.length ? savedLocations.map(location => (
                 <LocationWidget key={location.id} data={location} isSaved={true} />
             )) : 

@@ -1,32 +1,40 @@
-import React, { useRef, useState } from 'react';
-import Input from './Input';
-import { GetPossibleLocations, GetWeatherData } from '../helpers/api.helpers'; 
-import SearchResults from './SearchResults';
-import AddedLocations from './AddedLocations';
+import React, { useEffect, useState } from "react";
+import Input from "./Input";
+import AddedLocations from "./AddedLocations";
+import LocationModal from "./LocationModal";
+import MessageBox from "./MessageBox";
 
 function Main() {
-    const searchRef = useRef(null);
-    const [searchedLocation, setSearchedLocation] = useState(null);
-    const [addedLocations, setAddedLocations] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [searchLocationData, setSearchLocationData] = useState([]);
 
-    const handleButtonClick = async (event) => {
-        const currentInputValue = searchRef.current.value;
-        const locationRawData = await GetPossibleLocations(currentInputValue);
-        let locations = [];
-        for (const location of locationRawData) {
-            const locationData = await GetWeatherData(location.coord.lat, location.coord.lon, location.state);
-            console.log(locationData)
-            locations.push(locationData);
+  // Handle setting modal as open.
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  return (
+    <main className="relative flex flex-col items-center w-full h-full pt-10 bg-none">
+      <MessageBox
+        title={"Hello!"}
+        innerText={
+          "Welcome to WTF! Simply type a location into the search bar to get started. Click the cancel button or press ENTER to clear your search."
         }
-        setSearchedLocation(locations);
-    }
-
-    return (
-        <main className='flex flex-col items-center w-full py-10 bg-none'>
-            <Input data={{ref: searchRef, onButtonClick: handleButtonClick}}/>
-            {searchedLocation ? <SearchResults locations={searchedLocation} /> : <AddedLocations />}
-        </main>
-    )
+      />
+      {modalOpen && (
+        <LocationModal
+          locationData={searchLocationData}
+          closeModal={closeModal}
+        />
+      )}
+      <Input openModal={openModal} setData={setSearchLocationData} />
+      <AddedLocations openModal={openModal} setData={setSearchLocationData} />
+    </main>
+  );
 }
 
-export default Main
+export default Main;

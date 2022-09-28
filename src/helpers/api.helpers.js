@@ -24,7 +24,7 @@ async function GetWeatherData(lat, lon, state) {
 // Checks for comma delimiter.
 // @returns list of location objects.
 async function GetPossibleLocations(currentString) {
-  const [cityName, stateName, countryName] = currentString.split(",");
+  const [cityName, stateName] = currentString.split(",");
   // Search for match(es) within the US.
   let matches = locationData.filter((item) => {
     const condition = stateName

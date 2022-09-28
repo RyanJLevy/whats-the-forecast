@@ -25,9 +25,9 @@ function Input({ openModal, setData }) {
     }
 
     // Handles selection of search result. Sets modal open state and search coordinates.
-    const HandleSearchItemSelection = ( coordinates, state ) => {
+    const HandleSearchItemSelection = ( id, coordinates, state ) => {
         openModal();
-        setData([ coordinates.lat, coordinates.lon, state ]);
+        setData([ id, coordinates.lat, coordinates.lon, state ]);
         inputRef.current.value = '';
         setCurrentSearch('');
         setSearchResults([]);
@@ -65,7 +65,7 @@ function Input({ openModal, setData }) {
                                     <li 
                                     key={location.id} 
                                     className='w-full flex items-center justify-center py-4 hover:bg-gray-50 cursor-pointer'
-                                    onClick={ () => HandleSearchItemSelection(location.coord, location.state) }
+                                    onClick={ () => HandleSearchItemSelection(location.id, location.coord, location.state) }
                                     tabIndex={0}
                                     >
                                         <LocationMarkerIcon className='w-6 text-purple-primary px-1' />

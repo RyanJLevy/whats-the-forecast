@@ -8,17 +8,16 @@ import { LocationMarkerIcon, BookmarkIcon } from '@heroicons/react/outline';
 import { BookmarkIcon as BookmarkIconSolid } from '@heroicons/react/solid';
 import IsLocationInStorage from '../helpers/localStorage.helpers';
 
-function SearchResults({ locationData, closeModal }) {
+function LocationModal({ locationData, closeModal }) {
     const [ hasLoaded, setHasLoaded ] = useState(false);
     const [ weatherData, setWeatherData ] = useState(null);
     const [ locationSaved, setLocationSaved ] = useState(false);
 
     // Get weather data for searched location.
     useEffect(() => {
-        const [lat, lon, state] = locationData;
+        const [id, lat, lon, state] = locationData;
         const getWeatherData = async () => {
             const returnedData = await GetWeatherData(lat, lon, state);
-            console.log(returnedData);
             setWeatherData(returnedData);
             setHasLoaded(true);
         };
@@ -29,11 +28,9 @@ function SearchResults({ locationData, closeModal }) {
 
     // // Check whether or not location is currently saved.
     useEffect(() => {
-        const [lat, lon, state] = locationData;
-        console.log(lat, lon, state);
+        const [id, lat, lon, state] = locationData;
         const checkForLocalStorage = async () => {
-            const locationInLS = await IsLocationInStorage({lat: parseFloat(lat).toFixed(4), lon: parseFloat(lon).toFixed(4), state: state});
-            console.log(locationInLS);
+            const locationInLS = await IsLocationInStorage(id);
             setLocationSaved(locationInLS);
         }
         checkForLocalStorage();
@@ -41,17 +38,17 @@ function SearchResults({ locationData, closeModal }) {
 
     // Save or remove current location from Local Storage.
     const HandleSaveClick = () => {
-        const [lat, lon, state] = locationData;
+        const [id, lat, lon, state] = locationData;
         setLocationSaved(!locationSaved);
         let localStorageLocations = JSON.parse(localStorage.getItem('locations')) ?? [];
         // Find and remove entry in LS with given lat/lon data.
         const removeFromLocalStorage = () => {
             const locations = localStorageLocations.filter(location => {
-                return location.lat !== lat && location.lon !== lon;
+                return id !== location.id;
             });
             !locations.length ? localStorage.removeItem('locations') : localStorage.setItem('locations', JSON.stringify(locations));
         }
-        !locationSaved ? localStorage.setItem('locations', JSON.stringify([...localStorageLocations, {lat: parseFloat(lat).toFixed(4), lon: parseFloat(lon).toFixed(4), state: state}])) : removeFromLocalStorage();
+        !locationSaved ? localStorage.setItem('locations', JSON.stringify([...localStorageLocations, {id: id, lat: parseFloat(lat).toFixed(4), lon: parseFloat(lon).toFixed(4), state: state}])) : removeFromLocalStorage();
     }
 
     // Get the appropriate weather image for the given weather conditions.
@@ -117,4 +114,4 @@ function SearchResults({ locationData, closeModal }) {
     )
 }
 
-export default SearchResults
+export default LocationModal;

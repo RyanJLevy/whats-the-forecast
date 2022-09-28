@@ -19,12 +19,11 @@ async function GetWeatherDataFromStorage() {
 // Returns whether or not location is currently saved to user Local Storage.
 // @param {object} - location latitude, longitude, and state.
 // @return {boolean} - returns true if in LS, false if not.
-export default async function IsLocationInStorage( locationDetails ) {
+export default async function IsLocationInStorage( locationID ) {
     if (!localStorage.getItem('locations')) return false;
     const localStorageValues = await JSON.parse(localStorage.getItem('locations'));
     for (const value of localStorageValues) {
-        console.log(value.lat, locationDetails.lat)
-        if (value.lat === locationDetails.lat && value.lon === locationDetails.lon && value.state.toLowerCase() === locationDetails.state.toLowerCase()) {
+        if (value.id === locationID) {
             return true;
         }
     }

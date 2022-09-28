@@ -15,7 +15,7 @@ function LocationModal({ locationData, closeModal }) {
 
   // Get weather data for searched location.
   useEffect(() => {
-    const [id, lat, lon, state] = locationData;
+    const [, lat, lon, state] = locationData;
     const getWeatherData = async () => {
       const returnedData = await GetWeatherData(lat, lon, state);
       setWeatherData(returnedData);
@@ -27,7 +27,7 @@ function LocationModal({ locationData, closeModal }) {
 
   // // Check whether or not location is currently saved.
   useEffect(() => {
-    const [id, lat, lon, state] = locationData;
+    const [id] = locationData;
     const checkForLocalStorage = async () => {
       const locationInLS = await IsLocationInStorage(id);
       setLocationSaved(locationInLS);

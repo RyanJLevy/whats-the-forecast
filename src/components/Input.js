@@ -52,7 +52,7 @@ function Input({ openModal, setData }) {
         onSubmit={HandleSubmit}
         spellCheck={"false"}
       >
-        <div className="w-[320px] lg:w-[500px] relative">
+        <div className="w-[340px] lg:w-[500px] relative">
           <input
             type={"text"}
             className="bg-none border-purple-secondary border-[1px] rounded-md focus:outline-none w-full px-6 py-2 placeholder:text-gray-secondary text-purple-secondary"

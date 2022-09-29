@@ -88,7 +88,7 @@ function LocationModal({ locationData, closeModal }) {
       onClick={() => closeModal()}
     >
       <dialog
-        className="w-[300px] lg:w-[400px] flex items-center justify-center bg-gray-50 rounded-md shadow-md z-[99] p-0"
+        className="w-[300px] lg:w-[400px] flex items-center justify-center bg-gray-50 rounded-md shadow-md z-[99] p-0 h-auto"
         onClick={(event) => event.stopPropagation()}
       >
         {hasLoaded ? (

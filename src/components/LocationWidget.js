@@ -65,9 +65,9 @@ function LocationWidget(props) {
         onClick={handleSaveButtonClick}
       >
         {locationSaved ? (
-          <BookmarkIconSolid className="text-white absolute w-[25px] top-4 right-4" />
+          <BookmarkIconSolid className="text-white absolute w-[25px] top-2 right-2" />
         ) : (
-          <BookmarkIcon className="text-white absolute w-[25px] top-4 right-4" />
+          <BookmarkIcon className="text-white absolute w-[25px] top-2 right-2" />
         )}
       </button>
     </div>

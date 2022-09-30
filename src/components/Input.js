@@ -67,7 +67,7 @@ function Input({ openModal, setData }) {
             onClick={HandleSubmit}
           />
           {searchResults && (
-            <ul className="absolute w-full bg-white shadow-md rounded-md z-50">
+            <ul className="absolute w-full bg-white shadow-md rounded-md z-50 max-h-[392px] overflow-scroll">
               {searchResults.map((location) => (
                 <li
                   key={location.id}

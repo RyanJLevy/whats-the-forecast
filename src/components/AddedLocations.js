@@ -19,7 +19,7 @@ function AddedLocations({ openModal, setData }) {
     setData([data.id, data.coord.lat, data.coord.lon, data.state]);
   };
   return (
-    <div className="flex flex-col w-[400px] lg:w-[800px] max-h-[462px] overflow-scroll items-center my-8 pb-4 bg-gray-100 rounded-md">
+    <div className="flex flex-col w-[400px] lg:w-[800px] max-h-[362px] md:max-h-[462px] overflow-scroll items-center my-8 pb-4 bg-gray-100 rounded-md">
       {savedLocations.length ? (
         savedLocations.map((location) => (
           <LocationWidget
